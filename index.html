@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FuriesPS Cyberpunk Nexus V3</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+background:#050816;color:#fff;font-family:Segoe UI,sans-serif;overflow-x:hidden;
+}
+.cyber-city{
+position:fixed;inset:0;z-index:-5;
+background:
+radial-gradient(circle at top,#32105c 0,#050816 60%),
+linear-gradient(to top,rgba(0,255,255,.08),transparent 40%);
+}
+.cyber-city:after{
+content:"";
+position:absolute;left:0;right:0;bottom:0;height:220px;
+background:repeating-linear-gradient(90deg,#0ff 0 2px,transparent 2px 60px);
+opacity:.2;
+}
+.scanline{
+position:fixed;inset:0;pointer-events:none;z-index:99;
+background:repeating-linear-gradient(transparent 0 3px,rgba(255,255,255,.03) 4px);
+}
+.rain{position:fixed;inset:0;pointer-events:none;z-index:-2}
+.drop{
+position:absolute;width:2px;height:80px;
+background:linear-gradient(transparent,#00ffff);
+animation:fall linear infinite;
+}
+@keyframes fall{from{transform:translateY(-100px)}to{transform:translateY(110vh)}}
+.container{max-width:1400px;margin:auto;padding:30px}
+h1{
+font-size:80px;text-align:center;
+background:linear-gradient(90deg,#0ff,#f0f,#0ff);
+-webkit-background-clip:text;color:transparent;
+text-shadow:0 0 30px #0ff;
+}
+.subtitle{text-align:center;opacity:.8;margin-bottom:25px}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+.card{
+background:rgba(10,15,30,.7);
+border:1px solid #00ffff55;
+border-radius:24px;
+padding:22px;
+backdrop-filter:blur(12px);
+box-shadow:0 0 20px #00ffff22;
+position:relative;
+overflow:hidden;
+}
+.card:before{
+content:"";position:absolute;inset:0;
+background:linear-gradient(90deg,transparent,#0ff55,transparent);
+transform:translateX(-100%);
+animation:borderMove 4s infinite;
+}
+@keyframes borderMove{100%{transform:translateX(100%)}}
+.label{color:#0ff;font-size:12px;letter-spacing:2px}
+.value{font-size:34px;font-weight:bold;margin-top:8px}
+.online{color:#00ff88}
+.progress{height:12px;background:#111;border-radius:20px;overflow:hidden;margin-top:10px}
+.bar{height:100%;background:linear-gradient(90deg,#0ff,#f0f)}
+.section{margin-top:25px}
+.monitor{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.discord,.leaderboard{min-height:220px}
+</style>
+</head>
+<body>
+<div class="cyber-city"></div>
+<div class="rain" id="rain"></div>
+<div class="scanline"></div>
+
+<div class="container">
+<h1>FURIESPS</h1>
+<div class="subtitle">CYBERPUNK NEXUS CONTROL CENTER</div>
+
+<div class="grid">
+<div class="card"><div class="label">SERVER STATUS</div><div id="status" class="value">...</div></div>
+<div class="card"><div class="label">PLAYERS ONLINE</div><div id="players" class="value">0</div></div>
+<div class="card"><div class="label">ACTIVE WORLDS</div><div id="worlds" class="value">0</div></div>
+<div class="card"><div class="label">PING</div><div id="ping" class="value">0ms</div></div>
+</div>
+
+<div class="section monitor">
+<div class="card">
+<div class="label">CPU USAGE</div>
+<div id="cpu" class="value">0%</div>
+<div class="progress"><div id="cpuBar" class="bar"></div></div>
+</div>
+
+<div class="card">
+<div class="label">RAM USAGE</div>
+<div id="ram" class="value">0 MB</div>
+<div class="progress"><div id="ramBar" class="bar"></div></div>
+</div>
+
+<div class="card">
+<div class="label">STORAGE</div>
+<div id="storage" class="value">0%</div>
+<div class="progress"><div id="storageBar" class="bar"></div></div>
+</div>
+
+<div class="card">
+<div class="label">UPTIME TRACKER</div>
+<div id="uptime" class="value">LIVE</div>
+</div>
+</div>
+
+<div class="section monitor">
+<div class="card discord">
+<div class="label">DISCORD WIDGET</div>
+<div style="margin-top:15px">Tambahkan Discord Widget atau Invite Server di sini.</div>
+</div>
+
+<div class="card leaderboard">
+<div class="label">LEADERBOARD</div>
+<div style="margin-top:15px">
+#1 Coming Soon<br>#2 Coming Soon<br>#3 Coming Soon
+</div>
+</div>
+</div>
+</div>
+
+<script>
+for(let i=0;i<120;i++){
+ let d=document.createElement('div');
+ d.className='drop';
+ d.style.left=Math.random()*100+'vw';
+ d.style.animationDuration=(Math.random()*2+1)+'s';
+ document.getElementById('rain').appendChild(d);
+}
+
+function animateValue(el,target){
+ let current=parseInt(el.textContent)||0;
+ let step=(target-current)/20;
+ let i=0;
+ let t=setInterval(()=>{
+   current+=step;
+   el.textContent=Math.round(current);
+   if(++i>=20){el.textContent=target;clearInterval(t);}
+ },20);
+}
+
+async function loadData(){
+ const start=performance.now();
+ const r=await fetch('https://api.gtps.cloud/api/server/public/5218');
+ const data=await r.json();
+ const ping=Math.round(performance.now()-start);
+
+ document.getElementById('ping').textContent=ping+'ms';
+ document.getElementById('status').innerHTML=data.state.server_status ? 'ONLINE' : 'OFFLINE';
+ document.getElementById('status').className='value online';
+
+ animateValue(document.getElementById('players'), data.state.players_online);
+ animateValue(document.getElementById('worlds'), data.state.active_worlds);
+
+ let cpu=(data.state.cpu_usage/data.tier_info.max_cpu_usage*100).toFixed(1);
+ document.getElementById('cpu').textContent=cpu+'%';
+ document.getElementById('cpuBar').style.width=cpu+'%';
+
+ let ram=(data.state.memory_usage/data.tier_info.max_memory_usage*100).toFixed(1);
+ document.getElementById('ram').textContent=data.state.memory_usage+' MB';
+ document.getElementById('ramBar').style.width=ram+'%';
+
+ let st=(data.state.storage_usage/data.tier_info.max_storage_usage*100).toFixed(1);
+ document.getElementById('storage').textContent=data.state.storage_usage+' MB';
+ document.getElementById('storageBar').style.width=st+'%';
+}
+loadData();
+setInterval(loadData,15000);
+</script>
+</body>
+</html>
