@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
   </script>
   <style>
+    /* ===== RESET & VARIABLES ===== */
     * {
       margin: 0;
       padding: 0;
@@ -27,12 +28,6 @@
       --text-dim: #8b9bb5;
       --shadow-glow: 0 0 25px rgba(0, 240, 255, 0.15);
       --font-grobold: 'Grobold', 'Arial Black', sans-serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
     }
 
     body {
@@ -145,7 +140,7 @@
       backdrop-filter: blur(2px);
     }
 
-    /* TOPBAR */
+    /* ===== TOPBAR ===== */
     .topbar {
       display: flex;
       align-items: center;
@@ -248,7 +243,7 @@
       transform: translateY(-7px) rotate(-45deg);
     }
 
-    /* BURGER MENU */
+    /* ===== BURGER MENU ===== */
     .burger-menu {
       position: fixed;
       top: 80px;
@@ -353,6 +348,7 @@
       display: block;
     }
 
+    /* ===== PAGE CONTAINER ===== */
     .page-container {
       flex: 1;
       padding: 28px 32px 50px;
@@ -381,7 +377,7 @@
       }
     }
 
-    /* GLASS CARD */
+    /* ===== GLASS CARD ===== */
     .glass-card {
       background: var(--bg-card);
       backdrop-filter: blur(12px) saturate(180%);
@@ -436,17 +432,7 @@
       z-index: 2;
     }
 
-    .glass-card h3 {
-      font-family: var(--font-grobold);
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: 0.3px;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* GLITCH */
+    /* ===== GLITCH ===== */
     .glitch {
       position: relative;
       display: inline-block;
@@ -517,6 +503,7 @@
       }
     }
 
+    /* ===== DASHBOARD ===== */
     .dash-header {
       display: flex;
       flex-wrap: wrap;
@@ -667,17 +654,6 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       position: relative;
       overflow: hidden;
-    }
-
-    .metric-box::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(180deg, rgba(0, 240, 255, 0.02), transparent);
-      pointer-events: none;
     }
 
     .metric-box:hover {
@@ -1008,7 +984,7 @@
       margin-bottom: 22px;
     }
 
-    /* TOOLS GRID */
+    /* ===== TOOLS GRID ===== */
     .tools-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1022,6 +998,7 @@
       }
     }
 
+    /* ===== INFO CARD ===== */
     .info-card {
       background: var(--bg-card);
       backdrop-filter: blur(12px) saturate(180%);
@@ -1092,31 +1069,7 @@
       font-family: var(--font-grobold);
     }
 
-    .placeholder-list {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .placeholder-item {
-      background: rgba(12, 12, 24, 0.3);
-      padding: 14px 20px;
-      border-radius: 16px;
-      font-size: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      color: var(--text-dim);
-      transition: all 0.2s;
-      font-family: var(--font-grobold);
-    }
-
-    .placeholder-item:hover {
-      border-color: rgba(0, 255, 255, 0.06);
-      background: rgba(0, 240, 255, 0.02);
-    }
-
+    /* ===== HOST ===== */
     .host-section {
       background: var(--bg-card);
       backdrop-filter: blur(12px) saturate(180%);
@@ -1281,6 +1234,7 @@
       font-family: var(--font-grobold);
     }
 
+    /* ===== HOW TO PLAY ===== */
     .how-card {
       background: rgba(12, 12, 24, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.02);
@@ -1290,17 +1244,6 @@
       backdrop-filter: blur(4px);
       position: relative;
       overflow: hidden;
-    }
-
-    .how-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.02), transparent 60%);
-      pointer-events: none;
     }
 
     .how-card:hover {
@@ -1381,6 +1324,7 @@
       margin-top: 22px;
     }
 
+    /* ===== COMMUNITY ===== */
     .community-btn {
       display: inline-flex;
       align-items: center;
@@ -1435,6 +1379,7 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     }
 
+    /* ===== SEARCH ===== */
     .search-container {
       display: flex;
       gap: 14px;
@@ -1492,7 +1437,7 @@
       filter: brightness(1.1);
     }
 
-    /* TOOLS BUTTON */
+    /* ===== TOOLS ===== */
     .tool-btn {
       background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
       border: none;
@@ -1523,15 +1468,22 @@
       box-shadow: 0 0 50px rgba(0, 240, 255, 0.25);
     }
 
+    .tool-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
     .color-preview {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       border-radius: 16px;
       border: 2px solid rgba(0, 255, 255, 0.2);
       display: inline-block;
       vertical-align: middle;
       margin-right: 16px;
       box-shadow: 0 0 30px rgba(0, 240, 255, 0.05);
+      flex-shrink: 0;
     }
 
     .color-result {
@@ -1550,6 +1502,45 @@
       color: var(--text-primary);
     }
 
+    /* Color Picker Styling */
+    .color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .color-picker-wrapper input[type="color"] {
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-picker-wrapper input[type="color"]::-webkit-color-swatch {
+      border: none;
+      border-radius: 10px;
+    }
+
+    .color-hex-label {
+      font-family: var(--font-grobold);
+      font-size: 18px;
+      color: var(--text-primary);
+      background: rgba(12, 12, 24, 0.3);
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    /* ===== FILE DROP ===== */
     .file-drop {
       border: 2px dashed rgba(0, 255, 255, 0.15);
       border-radius: 20px;
@@ -1664,6 +1655,7 @@
       box-shadow: 0 0 30px rgba(0, 240, 255, 0.04);
     }
 
+    /* ===== TOAST ===== */
     .toast-simple {
       position: fixed;
       bottom: 30px;
@@ -1694,6 +1686,7 @@
       opacity: 1;
     }
 
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 820px) {
       .topbar {
         padding: 12px 18px;
@@ -1823,11 +1816,15 @@
         padding: 6px 14px;
       }
       .color-preview {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
       }
       .file-drop {
         padding: 24px 16px;
+      }
+      .color-picker-wrapper input[type="color"] {
+        width: 50px;
+        height: 50px;
       }
     }
 
@@ -2049,38 +2046,35 @@
         </div>
       </div>
 
-      <!-- TOOLS PAGE - BGRA & RTTEX CONVERTER -->
+      <!-- TOOLS PAGE -->
       <div class="page" id="page-tools">
         <div class="tools-grid">
           <!-- BGRA COLOR CONVERTER -->
           <div class="info-card">
             <h2><i class="fas fa-palette" style="color:var(--neon-cyan);"></i> BGRA Color Converter</h2>
-            <p>Konversi warna BGRA ke berbagai format: RGBA, HEX, CSS, Decimal.</p>
+            <p>Pilih warna menggunakan color picker, otomatis konversi ke RGBA, HEX, CSS.</p>
 
-            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;">
-              <div class="color-preview" id="colorPreview" style="background:rgba(0,240,255,1);"></div>
-              <div style="flex:1;min-width:180px;">
-                <label style="font-family:var(--font-grobold);font-size:12px;color:var(--text-dim);display:block;margin-bottom:4px;">BGRA (0-255,0-255,0-255,0-1)</label>
-                <input type="text" id="bgraInput" value="0,240,255,1" style="width:100%;background:rgba(12,12,24,0.4);border:1px solid rgba(0,255,255,0.06);border-radius:12px;padding:10px 16px;color:var(--text-primary);font-family:var(--font-grobold);font-size:14px;outline:none;" />
-              </div>
-              <button class="tool-btn" id="convertColorBtn"><i class="fas fa-sync-alt"></i> Convert</button>
+            <div class="color-picker-wrapper">
+              <input type="color" id="colorPicker" value="#00f0ff" />
+              <div class="color-preview" id="colorPreview" style="background:#00f0ff;"></div>
+              <span class="color-hex-label" id="hexLabel">#00f0ff</span>
             </div>
 
             <div id="colorResults">
-              <div class="color-result">RGBA: <span id="resultRGBA">rgba(0, 240, 255, 1)</span></div>
-              <div class="color-result">HEX: <span id="resultHEX">#00f0ff</span></div>
-              <div class="color-result">CSS: <span id="resultCSS">rgba(0, 240, 255, 1)</span></div>
-              <div class="color-result">Decimal: <span id="resultDecimal">0, 240, 255, 1</span></div>
+              <div class="color-result">🔵 RGBA: <span id="resultRGBA">rgba(0, 240, 255, 1)</span></div>
+              <div class="color-result">🎨 HEX: <span id="resultHEX">#00f0ff</span></div>
+              <div class="color-result">📦 CSS: <span id="resultCSS">rgba(0, 240, 255, 1)</span></div>
+              <div class="color-result">🔢 Decimal: <span id="resultDecimal">0, 240, 255, 1</span></div>
             </div>
             <div class="info-highlight" style="margin-top:12px;font-size:12px;">
-              <i class="fas fa-info-circle"></i> Format: B,G,R,A (Blue, Green, Red, Alpha) · Alpha 0-1
+              <i class="fas fa-info-circle"></i> Format BGRA: Blue, Green, Red, Alpha · Warna dipilih dari color picker
             </div>
           </div>
 
           <!-- RTTEX / PNG CONVERTER -->
           <div class="info-card">
             <h2><i class="fas fa-exchange-alt" style="color:var(--neon-purple);"></i> RTTEX ↔ PNG Converter</h2>
-            <p>Upload file PNG untuk di-convert ke RTTEX, atau sebaliknya.</p>
+            <p>Upload file PNG atau RTTEX, lalu konversi ke format lainnya.</p>
 
             <div class="file-drop" id="fileDrop">
               <i class="fas fa-cloud-upload-alt" style="font-size:40px;color:var(--neon-cyan);display:block;margin-bottom:12px;"></i>
@@ -2506,41 +2500,44 @@
       });
 
       // ========== BGRA COLOR CONVERTER ==========
-      function bgraToFormats(b, g, r, a) {
-        const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
-        const hex = '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
-        const css = rgba;
-        const decimal = `${r}, ${g}, ${b}, ${a}`;
-        return { rgba, hex, css, decimal };
+      const colorPicker = document.getElementById('colorPicker');
+      const colorPreview = document.getElementById('colorPreview');
+      const hexLabel = document.getElementById('hexLabel');
+
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
       }
 
-      function updateColorPreview() {
-        const input = document.getElementById('bgraInput').value.trim();
-        const parts = input.split(',').map(s => parseFloat(s.trim()));
-        if (parts.length === 4 && parts.every(n => !isNaN(n))) {
-          const [b, g, r, a] = parts;
-          if (b >= 0 && b <= 255 && g >= 0 && g <= 255 && r >= 0 && r <= 255 && a >= 0 && a <= 1) {
-            const result = bgraToFormats(b, g, r, a);
-            document.getElementById('resultRGBA').textContent = result.rgba;
-            document.getElementById('resultHEX').textContent = result.hex;
-            document.getElementById('resultCSS').textContent = result.css;
-            document.getElementById('resultDecimal').textContent = result.decimal;
-            document.getElementById('colorPreview').style.background = result.rgba;
-            return;
-          }
-        }
-        showToast('Format salah! Gunakan: B,G,R,A (0-255,0-255,0-255,0-1)');
+      function updateColorFromPicker(hex) {
+        const rgb = hexToRgb(hex);
+        if (!rgb) return;
+        const { r, g, b } = rgb;
+        // BGRA = Blue, Green, Red, Alpha
+        const bgra = [b, g, r, 1];
+
+        document.getElementById('resultRGBA').textContent = `rgba(${r}, ${g}, ${b}, 1)`;
+        document.getElementById('resultHEX').textContent = hex.toUpperCase();
+        document.getElementById('resultCSS').textContent = `rgba(${r}, ${g}, ${b}, 1)`;
+        document.getElementById('resultDecimal').textContent = `${r}, ${g}, ${b}, 1`;
+
+        colorPreview.style.background = hex;
+        hexLabel.textContent = hex.toUpperCase();
       }
 
-      document.getElementById('convertColorBtn').addEventListener('click', updateColorPreview);
-      document.getElementById('bgraInput').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') updateColorPreview();
+      colorPicker.addEventListener('input', function() {
+        updateColorFromPicker(this.value);
       });
 
       // ========== RTTEX / PNG CONVERTER ==========
       let currentFile = null;
       let currentFileData = null;
       let currentFileType = null;
+      let currentFileArrayBuffer = null;
       let convertedBlob = null;
       let convertedFileName = '';
 
@@ -2575,20 +2572,37 @@
         }
         fileInfo.classList.add('show');
 
-        // Preview gambar
+        // Baca file sebagai ArrayBuffer untuk konversi
         const reader = new FileReader();
         reader.onload = function(e) {
-          previewImage.src = e.target.result;
-          conversionPreview.style.display = 'block';
-          previewStatus.textContent = '📷 Preview siap';
-          currentFileData = e.target.result;
+          currentFileArrayBuffer = e.target.result;
+          // Buat preview
+          if (currentFileType === 'png') {
+            const blob = new Blob([currentFileArrayBuffer], { type: 'image/png' });
+            const url = URL.createObjectURL(blob);
+            previewImage.src = url;
+            conversionPreview.style.display = 'block';
+            previewStatus.textContent = '📷 Preview PNG siap';
+          } else {
+            // RTTEX - coba tampilkan sebagai gambar (mungkin tidak bisa, tapi kita tetap tampilkan)
+            try {
+              const blob = new Blob([currentFileArrayBuffer], { type: 'application/octet-stream' });
+              const url = URL.createObjectURL(blob);
+              previewImage.src = url;
+              conversionPreview.style.display = 'block';
+              previewStatus.textContent = '📦 File RTTEX siap dikonversi';
+            } catch (err) {
+              previewStatus.textContent = '📦 RTTEX file loaded';
+              conversionPreview.style.display = 'block';
+            }
+          }
           downloadBtn.disabled = true;
           convertedBlob = null;
         };
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
       });
 
-      // Drag & drop support
+      // Drag & drop
       const dropZone = document.getElementById('fileDrop');
       dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -2609,51 +2623,66 @@
         }
       });
 
-      // Convert to RTTEX
+      // Convert to RTTEX (PNG → RTTEX)
       document.getElementById('convertToRTTEX').addEventListener('click', function() {
         if (!currentFile) return showToast('Upload file dulu!');
         if (currentFileType === 'rtex') return showToast('File sudah RTTEX!');
+        if (!currentFileArrayBuffer) return showToast('File belum siap!');
 
-        // Simulasi konversi PNG → RTTEX
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            // Buat file RTTEX (sebenarnya hanya rename dengan header palsu untuk demo)
-            const data = e.target.result;
-            // Dalam implementasi nyata, ini akan melakukan konversi format texture
-            // Untuk demo, kita buat blob dengan ekstensi .rttex
-            const blob = new Blob([data], { type: 'application/octet-stream' });
-            convertedBlob = blob;
-            convertedFileName = currentFile.name.replace(/\.png$/i, '.rttex');
-            downloadBtn.disabled = false;
-            previewStatus.textContent = '✅ Siap download sebagai RTTEX';
-            showToast('Konversi ke RTTEX berhasil!');
-          } catch (err) {
-            showToast('Gagal konversi: ' + err.message);
-          }
-        };
-        reader.readAsArrayBuffer(currentFile);
+        try {
+          // Simulasi konversi: kita buat file dengan header RTTEX sederhana
+          // Dalam implementasi nyata, ini akan melakukan konversi format texture Growtopia
+          // Untuk demo, kita buat file .rttex dengan data yang sama
+          const data = new Uint8Array(currentFileArrayBuffer);
+          // Tambahkan header sederhana (hanya untuk demo)
+          const header = new TextEncoder().encode('RTTEX');
+          const combined = new Uint8Array(header.length + data.length);
+          combined.set(header, 0);
+          combined.set(data, header.length);
+
+          const blob = new Blob([combined], { type: 'application/octet-stream' });
+          convertedBlob = blob;
+          convertedFileName = currentFile.name.replace(/\.png$/i, '.rttex');
+          downloadBtn.disabled = false;
+          previewStatus.textContent = '✅ Siap download sebagai RTTEX';
+          showToast('Konversi ke RTTEX berhasil!');
+        } catch (err) {
+          showToast('Gagal konversi: ' + err.message);
+        }
       });
 
-      // Convert to PNG
+      // Convert to PNG (RTTEX → PNG)
       document.getElementById('convertToPNG').addEventListener('click', function() {
         if (!currentFile) return showToast('Upload file dulu!');
         if (currentFileType === 'png') return showToast('File sudah PNG!');
+        if (!currentFileArrayBuffer) return showToast('File belum siap!');
 
-        // Untuk RTTEX ke PNG, kita gunakan preview image yang sudah di-load
-        if (currentFileData) {
-          try {
-            // Konversi dari dataURL ke blob
-            const link = document.createElement('a');
-            link.href = currentFileData;
-            link.download = currentFile.name.replace(/\.(rtex|rttex)$/i, '.png');
-            link.click();
-            showToast('Download PNG siap!');
-          } catch (err) {
-            showToast('Gagal konversi: ' + err.message);
+        try {
+          // Untuk RTTEX ke PNG, kita coba parse header
+          let data = new Uint8Array(currentFileArrayBuffer);
+          // Cek apakah ada header RTTEX
+          const header = new TextDecoder().decode(data.slice(0, 5));
+          let imageData = data;
+          if (header === 'RTTEX') {
+            // Skip header
+            imageData = data.slice(5);
           }
-        } else {
-          showToast('Tidak bisa konversi file ini');
+
+          // Buat PNG dari data (simulasi)
+          const blob = new Blob([imageData], { type: 'image/png' });
+          convertedBlob = blob;
+          convertedFileName = currentFile.name.replace(/\.(rtex|rttex)$/i, '.png');
+
+          // Tampilkan preview
+          const url = URL.createObjectURL(blob);
+          previewImage.src = url;
+          conversionPreview.style.display = 'block';
+          previewStatus.textContent = '✅ Siap download sebagai PNG';
+
+          downloadBtn.disabled = false;
+          showToast('Konversi ke PNG berhasil!');
+        } catch (err) {
+          showToast('Gagal konversi: ' + err.message);
         }
       });
 
@@ -2679,8 +2708,8 @@
       allPages.slice(1).forEach(p => document.getElementById('page-' + p)?.classList.remove('active'));
 
       // Default color
-      updateColorPreview();
+      updateColorFromPicker('#00f0ff');
     })();
   </script>
 </body>
-</html>
+  </html>
