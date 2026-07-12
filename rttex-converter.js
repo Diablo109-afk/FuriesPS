@@ -1,12 +1,11 @@
-// rttex-converter.js - RTTEX Converter Tools
+// rttex-converter.js - RTTEX Converter Tools with Preview
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Inisialisasi event listeners untuk RTTEX Converter
     initRTTEXConverter();
 });
 
 function initRTTEXConverter() {
-    // RTTEX to PNG
+    // ===== RTTEX to PNG =====
     const rttexToPngBtn = document.getElementById('rttex_to_png');
     if (rttexToPngBtn) {
         rttexToPngBtn.addEventListener('click', function() {
@@ -16,7 +15,9 @@ function initRTTEXConverter() {
             input.style.display = 'none';
             input.onchange = function(e) {
                 const file = e.target.files[0];
-                if (file) rttexToPng(file);
+                if (file) {
+                    rttexToPng(file);
+                }
             };
             document.body.appendChild(input);
             input.click();
@@ -24,7 +25,7 @@ function initRTTEXConverter() {
         });
     }
 
-    // PNG to RTTEX
+    // ===== PNG to RTTEX =====
     const pngToRttexBtn = document.getElementById('png_to_rttex');
     if (pngToRttexBtn) {
         pngToRttexBtn.addEventListener('click', function() {
@@ -34,7 +35,9 @@ function initRTTEXConverter() {
             input.style.display = 'none';
             input.onchange = function(e) {
                 const file = e.target.files[0];
-                if (file) pngToRttex(file);
+                if (file) {
+                    pngToRttex(file);
+                }
             };
             document.body.appendChild(input);
             input.click();
@@ -42,14 +45,32 @@ function initRTTEXConverter() {
         });
     }
 
-    // Download Image button
-    const downloadBtn = document.getElementById('download_image_rttex');
+    // ===== Preview Close Button =====
+    const closeBtn = document.getElementById('previewCloseBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            document.getElementById('rttexPreviewContainer').classList.remove('active');
+        });
+    }
+
+    // ===== Preview Download Button =====
+    const downloadBtn = document.getElementById('previewDownloadBtn');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', function() {
-            const canvas = document.getElementById('canvas_result_rttex');
-            if (canvas) {
+            const img = document.getElementById('previewImg');
+            const canvas = document.getElementById('previewCanvas');
+            const fileName = document.getElementById('previewFileName').textContent || 'rttex_output';
+            
+            if (img.style.display !== 'none' && img.src) {
+                // Download dari img (untuk PNG → RTTEX preview)
                 const link = document.createElement('a');
-                link.download = 'rttex_output.png';
+                link.download = fileName.replace(/\.[^.]+$/, '') + '.png';
+                link.href = img.src;
+                link.click();
+            } else if (canvas.style.display !== 'none') {
+                // Download dari canvas (untuk RTTEX → PNG)
+                const link = document.createElement('a');
+                link.download = fileName.replace(/\.[^.]+$/, '') + '.png';
                 link.href = canvas.toDataURL();
                 link.click();
             }
@@ -81,13 +102,13 @@ function readBufferString(buffer, pos, len) {
     return result;
 }
 
-function hashBuffer(buffer, element, text) {
+function hashBuffer(buffer) {
     let hash = 0x55555555;
     const toBuffer = new Uint8Array(buffer);
     for (let a = 0; a < toBuffer.length; a++) {
         hash = (hash >>> 27) + (hash << 5) + toBuffer[a];
     }
-    document.getElementById(element).innerHTML = text + hash;
+    return hash;
 }
 
 function saveDataBuffer(data, fileName) {
@@ -98,6 +119,78 @@ function saveDataBuffer(data, fileName) {
     a.download = fileName;
     a.click();
     window.URL.revokeObjectURL(url);
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toastCopy');
+    if (!toast) {
+        alert(message);
+        return;
+    }
+    const colors = {
+        success: '#4ade80',
+        error: '#ff2d95',
+        info: '#00f0ff'
+    };
+    toast.textContent = message;
+    toast.style.borderColor = colors[type] || colors.info;
+    toast.style.color = colors[type] || '#eef5ff';
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+        toast.classList.remove('show');
+        toast.style.borderColor = 'rgba(0, 255, 255, 0.1)';
+        toast.style.color = '#eef5ff';
+    }, 3000);
+}
+
+// ========== PREVIEW FUNCTIONS ==========
+
+function showPreview(fileName, dimensions, hash, imageData, isPng = false) {
+    const container = document.getElementById('rttexPreviewContainer');
+    const nameEl = document.getElementById('previewFileName');
+    const dimEl = document.getElementById('previewDimensions');
+    const hashEl = document.getElementById('previewHash');
+    const imgEl = document.getElementById('previewImg');
+    const canvasEl = document.getElementById('previewCanvas');
+    const placeholderEl = document.getElementById('previewPlaceholder');
+    const hashContainer = document.getElementById('previewHashContainer');
+    const rtexHashEl = document.getElementById('previewRTTEXHash');
+
+    // Reset semua
+    imgEl.style.display = 'none';
+    canvasEl.style.display = 'none';
+    placeholderEl.style.display = 'none';
+
+    container.classList.add('active');
+    nameEl.textContent = fileName;
+    dimEl.textContent = dimensions || '-';
+    hashEl.textContent = hash || '-';
+
+    if (isPng) {
+        // Preview untuk PNG → RTTEX (tampilkan gambar asli)
+        imgEl.style.display = 'block';
+        imgEl.src = imageData;
+        hashContainer.style.display = 'block';
+        rtexHashEl.textContent = hash || '-';
+    } else {
+        // Preview untuk RTTEX → PNG (tampilkan canvas hasil konversi)
+        canvasEl.style.display = 'block';
+        canvasEl.width = imageData.width;
+        canvasEl.height = imageData.height;
+        const ctx = canvasEl.getContext('2d');
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+        ctx.scale(1, -1);
+        ctx.drawImage(imageData, 0, -imageData.height);
+        hashContainer.style.display = 'block';
+        rtexHashEl.textContent = hash || '-';
+    }
+
+    document.getElementById('previewDownloadBtn').style.display = 'inline-flex';
+}
+
+function hidePreview() {
+    document.getElementById('rttexPreviewContainer').classList.remove('active');
 }
 
 // ========== RTTEX TO PNG ==========
@@ -115,7 +208,6 @@ function processRttexToPng(arrayBuffer) {
 
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-
         canvas.width = packedWidth;
         canvas.height = packedHeight;
 
@@ -137,24 +229,25 @@ function rttexToPng(file) {
     reader.onload = function(e) {
         const arrayBuffer = new Uint8Array(reader.result);
         const canvas = processRttexToPng(arrayBuffer);
-        
-        if (canvas) {
-            const resultCanvas = document.getElementById('canvas_result_rttex');
-            const context = resultCanvas.getContext('2d');
-            resultCanvas.width = canvas.width;
-            resultCanvas.height = canvas.height;
-            context.scale(1, -1);
-            context.drawImage(canvas, 0, -canvas.height);
 
-            document.getElementById('download_image_rttex').classList.remove('d-none');
-            document.getElementById('rttex_result_container').classList.remove('d-none');
+        if (canvas) {
+            const hash = hashBuffer(arrayBuffer);
             
-            // Auto download if enabled
+            // TAMPILKAN PREVIEW
+            showPreview(
+                file.name,
+                canvas.width + ' x ' + canvas.height,
+                hash,
+                canvas,
+                false  // bukan PNG, tapi hasil dari RTTEX
+            );
+
+            // AUTO DOWNLOAD jika diaktifkan
             const autoDownload = document.getElementById('auto_download_rttex');
             if (autoDownload && autoDownload.checked) {
                 const link = document.createElement('a');
                 link.download = file.name.split('.')[0] + '.png';
-                link.href = resultCanvas.toDataURL();
+                link.href = canvas.toDataURL();
                 link.click();
             }
             
@@ -172,13 +265,13 @@ function processPngToRttex(img) {
     canvas.height = img.height;
     context.scale(1, -1);
     context.drawImage(img, 0, -img.height);
-    
+
     const imageData = context.getImageData(0, 0, img.width, img.height);
     const pixelBuffer = new Uint8Array(imageData.data.buffer);
-    
+
     // RTTEX header
     const RTTEXBuffer = [0x52, 0x54, 0x54, 0x58, 0x54, 0x52];
-    
+
     writeBufferNumber(RTTEXBuffer, 8, 4, img.height);
     writeBufferNumber(RTTEXBuffer, 12, 4, img.width);
     writeBufferNumber(RTTEXBuffer, 16, 4, 5121);
@@ -193,17 +286,17 @@ function processPngToRttex(img) {
     writeBufferNumber(RTTEXBuffer, 112, 4, 0);
     writeBufferNumber(RTTEXBuffer, 116, 4, 0);
     writeBufferNumber(RTTEXBuffer, 120, 4, 0);
-    
+
     // Compress with pako
     const deflateBuffer = pako.deflate(new Uint8Array([...RTTEXBuffer, ...pixelBuffer]));
-    
+
     // RTPACK header
     const RTPACKBuffer = [0x52, 0x54, 0x50, 0x41, 0x43, 0x4B];
     writeBufferNumber(RTPACKBuffer, 8, 4, deflateBuffer.length);
     writeBufferNumber(RTPACKBuffer, 12, 4, 0x7c + pixelBuffer.length);
     RTPACKBuffer[16] = 1;
     for (let a = 17; a < 32; a++) RTPACKBuffer[a] = 0;
-    
+
     return new Uint8Array([...RTPACKBuffer, ...deflateBuffer]);
 }
 
@@ -221,38 +314,24 @@ function pngToRttex(file) {
         img.src = e.target.result;
         img.onload = function() {
             const result = processPngToRttex(img);
-            hashBuffer(result, 'rttex_hash_file', 'RTTEX Hash File: ');
+            const hash = hashBuffer(result);
+            
+            // TAMPILKAN PREVIEW (gambar asli)
+            showPreview(
+                file.name,
+                img.width + ' x ' + img.height,
+                hash,
+                img.src,  // data URL gambar
+                true      // ini PNG preview
+            );
+
+            // SAVE RTTEX FILE
             saveDataBuffer(result, file.name.split('.')[0] + '.rttex');
+            
+            // Update hash di preview
+            document.getElementById('previewRTTEXHash').textContent = hash;
+            
             showToast('PNG converted to RTTEX successfully!', 'success');
         };
     };
-}
-
-// ========== TOAST NOTIFICATION ==========
-
-function showToast(message, type = 'info') {
-    const toast = document.getElementById('toastCopy');
-    if (!toast) {
-        // Fallback: alert jika toast tidak ada
-        alert(message);
-        return;
-    }
-    
-    const colors = {
-        success: '#4ade80',
-        error: '#ff2d95',
-        info: '#00f0ff'
-    };
-    
-    toast.textContent = message;
-    toast.style.borderColor = colors[type] || colors.info;
-    toast.style.color = colors[type] || '#eef5ff';
-    toast.classList.add('show');
-    
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => {
-        toast.classList.remove('show');
-        toast.style.borderColor = 'rgba(0, 255, 255, 0.1)';
-        toast.style.color = '#eef5ff';
-    }, 3000);
 }
